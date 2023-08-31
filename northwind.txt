@@ -1,10 +1,15 @@
 1. SELECT * FROM customers;
 
-2. SELECT customer_id FROM customers
-   WHERE country = 'Mexico';
+2. SELECT DISTINCT country FROM customers;
 
 3. SELECT * FROM customers
    WHERE customer_id > 'BL' AND customer_id < 'BM';
+
+   ALTERNATIVELY:
+
+   SELECT * FROM customers
+   WHERE customer_id LIKE 'BL%';
+
 
 4. SELECT * FROM orders
    LIMIT 100;
@@ -66,7 +71,6 @@
     JOIN employees
     ON orders.employee_id = employees.employee_id
     WHERE employees.city = 'London';
-
 
 16. SELECT ship_name, orders.order_id FROM orders 
     JOIN order_details
