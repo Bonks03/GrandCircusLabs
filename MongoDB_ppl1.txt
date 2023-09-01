@@ -1,0 +1,28 @@
+- db.people.find()
+- db.people.find().count()
+- db.people.find({state: "Arizona"})
+- db.people.find({state: "Arizona", gender: "Male"})
+- db.people.find({$or: [{state: "Arizona"}, {state: "New Mexico"}]})
+- db.people.find({age: {$lt: 40}})
+- db.people.find({$and: [
+    {state: "Florida"},
+    {gender: "Female"},
+    {age: {$gte: 40, $lte: 45}}
+]})
+- db.people.find({first_name: /H\w+/})
+- db.people.find({state: "Michigan"}).sort({first_name: 1})
+- db.people.find({$or: [
+    {first_name: "Virginia"},
+    {state: "Virginia"}
+]})
+- db.people.find({age: {$lt: 30}}, 
+    {first_name: true, last_name: true, _id: false})
+- db.people.find({state: "Montana"}, 
+    {age: false})
+- db.people.find({email: /@[^.]+\.edu\b/}, 
+    {email: true, _id: false})
+- db.people.find({
+    "children.age": { $lt: 4 }
+}).count()
+- db.people.find({children: []})
+- db.people.find({children: {$ne: []}})
