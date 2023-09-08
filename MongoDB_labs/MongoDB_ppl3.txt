@@ -200,27 +200,6 @@ db.orders.aggregate([
   },
   {
     $group: {
-      _id: "$product", 
-      numProducts: {
-        $count: {$sum: "$items.count"}
-      }
-    }
-  },
-  {
-    $sort: {numProducts: -1}
-  },
-  {
-    $limit: 3
-  }
-])
-
-
-db.orders.aggregate([
-  {
-    $unwind: "$items"
-  },
-  {
-    $group: {
       _id: "$items.product",
       totalSold: { $sum: "$items.count" }
   }
