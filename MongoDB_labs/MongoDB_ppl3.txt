@@ -1,0 +1,279 @@
+db.people.aggregate([
+  {
+    $group: {
+      _id: null, 
+      averageAge: {
+        $avg: "$age"  
+      }
+    }
+  }
+])
+
+
+db.people.aggregate([
+  {
+    $group: {
+      _id: "$gender", 
+      averageAge: {
+        $avg: "$age"
+      }
+    }
+  }
+])
+
+
+db.people.aggregate([
+  {
+    $group: {
+      _id: "$gender", 
+      count: {
+        $sum: 1
+      }
+    }
+  }
+])
+
+
+db.people.aggregate([
+  {
+    $sort: { age: -1 }
+  },
+  {
+    $limit: 3
+  }
+])
+
+
+db.people.aggregate([
+  {
+    $sort: { age: 1 }
+  },
+  {
+    $limit: 5
+  },
+  {
+    $project: {
+      _id: false,
+      fullName: { $concat: ["$first_name", " ", "$last_name"] }
+    }
+  }
+])
+
+
+db.people.aggregate([
+  {
+    $group: {
+      _id: null, 
+      avgNumChildren: {
+        $avg: {$size: "$children"}
+      }
+    }
+  }
+])
+
+
+db.people.aggregate([
+  {
+    $unwind: "$children"
+  },
+  {
+    $match: {
+      "children.age": { $lt: 10 },
+      state: "Michigan"
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      nameAge: {
+        $concat: [
+          "$children.name",
+          " ",
+          { $toString: "$children.age" }
+        ]
+      }
+    }
+  }
+])
+
+
+
+db.people.aggregate([
+  {
+    $unwind: "$children"
+  },
+  {
+    $group: {
+      _id: "$state", 
+      avgAgeOfChild: {
+        $avg: "$children.age"
+      }
+    }
+  },
+  {
+    $sort: {avgAgeOfChild: -1}
+  }
+])
+
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: null,
+      totalSum: {
+        $sum: "$total"
+      }
+    }
+  }
+])
+
+
+db.orders.aggregate([
+  {
+    $match: {date: "2017-05-22"}
+  },
+  {
+    $group: {
+      _id: null,
+      totalSum: {
+        $sum: "$total"
+      }
+    }
+  }
+])
+
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$date",
+      totalAmount: { $sum: "$total" }
+    }
+  },
+  {
+    $sort: { totalAmount: -1 }
+  },
+  {
+    $limit: 1
+  },
+  {
+    $project: {
+      _id: 0,
+      date: "$_id",
+      totalAmount: { $concat: ["$", { $toString: "$totalAmount" }] }
+    }
+  }
+])
+
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$date",
+      totalAmount: { $sum: "$total" }
+    }
+  },
+  {
+    $sort: { totalAmount: -1 }
+  },
+  {
+    $limit: 1
+  },
+  {
+    $project: {
+      _id: 0,
+      dateAndTotal: {
+        $concat: [
+          "$_id",
+          " $",
+          { $toString: "$totalAmount" }
+        ]
+      }
+    }
+  }
+])
+
+
+db.orders.aggregate([
+  {
+    $unwind: "$items"
+  },
+  {
+    $group: {
+      _id: "$product", 
+      numProducts: {
+        $count: {$sum: "$items.count"}
+      }
+    }
+  },
+  {
+    $sort: {numProducts: -1}
+  },
+  {
+    $limit: 3
+  }
+])
+
+
+db.orders.aggregate([
+  {
+    $unwind: "$items"
+  },
+  {
+    $group: {
+      _id: "$items.product",
+      totalSold: { $sum: "$items.count" }
+  }
+  },
+  {
+    $sort: { totalSold: -1 }
+  },
+  {
+    $limit: 3
+  },
+  {
+    $project: {
+      _id: 0,
+      result: {
+        $concat: [
+          "$_id",
+          " ",
+          { $toString: "$totalSold" }
+        ]
+      }
+    }
+  }
+])
+
+
+db.orders.aggregate([
+  {
+    $unwind: "$items"
+  },
+  {
+    $group: {
+      _id: "$items.product",
+      totalRevenue: {
+        $sum: { $multiply: ["$items.count", "$items.price"] }
+      }
+    }
+  },
+  {
+    $sort: { totalRevenue: -1 }
+  },
+  {
+    $limit: 1
+  },
+  {
+    $project: {
+      _id: 0,
+      result: {
+        $concat: [
+          "$_id",
+          " $",
+          { $toString: "$totalRevenue" }
+        ]
+      }
+    }
+  }
+])
