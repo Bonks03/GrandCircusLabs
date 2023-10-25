@@ -28,3 +28,4 @@ spotify_report/datasets/genre_artists.csv
 spotify_report/datasets/tracks.csv
 .gitignore
 .gitignore
+spotify_report/datasets/tracks_artists.csv
