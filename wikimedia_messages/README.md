@@ -7,6 +7,7 @@ This Python project consists of a Kafka producer and a Kafka consumer that work 
 Before running the program, ensure you have the following installed:
 
 - [Python](https://www.python.org/) (version 3.x recommended)
+- [pip](https://pip.pypa.io/) (Python package installer)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 
@@ -15,21 +16,37 @@ Before running the program, ensure you have the following installed:
 1. Clone this repository to your local machine:
 
     ```bash
-    git clone <repository-url>
-    cd wikimedia-kafka
+    git clone https://github.com/Bonks03/GrandCircusLabs/tree/main/wikimedia_messages
+    cd wikimedia_messages
     ```
 
-2. Create and activate a virtual environment (optional but recommended):
+2. Create and activate a virtual environment in kafka_consumer:
 
     ```bash
-    python3 -m venv venv
-    source venv/bin/activate
+    cd kafka_consumer
+    python3 -m venv .venv
+    source .venv/bin/activate
     ```
 
-3. Install the required dependencies:
+3. Create and activate a virtual environment in kafka_producer:
 
     ```bash
-    pip install -r requirements.txt
+    cd kafka_producer
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
+
+4. Build all images (this will automatically install required libraries):
+
+    ```bash
+    cd kafka_broker
+    docker build -t broker:latest .
+    cd ../kafka_zookeeper
+    docker build -t zookeeper:latest .
+    cd ../kafka_producer
+    docker build -t producer:latest .
+    cd ../kafka_consumer
+    docker build -t consumer:latest .
     ```
 
 ## Docker Compose Setup
@@ -40,23 +57,17 @@ The project includes Docker Compose configurations to run Zookeeper, Kafka broke
 docker-compose up
 ```
 
-This command will start Zookeeper, Kafka broker, Kafka producer, and Kafka consumer services.
+This command will start Zookeeper, Kafka broker, Kafka producer, Kafka consumer services, and create a topic named `latest_events`.
 
 ## Usage
 
 ### Kafka Producer
 
-Run the Kafka producer separately:
-
-```bash
-python producer.py
-```
-
-The producer will start fetching events from the Wikimedia recent changes stream and publish them to the Kafka topic.
+The consumer is included in the Docker Compose setup. It will start fetching events from the Wikimedia recent changes stream and publish them to the `latest_events` topic.
 
 ### Kafka Consumer
 
-The consumer is included in the Docker Compose setup. It will automatically consume messages from the Kafka topic.
+The consumer is included in the Docker Compose setup. It will automatically consume messages from the `latest_events` topic.
 
 ## Configuration
 
@@ -72,19 +83,7 @@ p.produce('your-kafka-topic', message.encode('utf-8'), callback=delivery_report)
 # consumer.py
 consumer_conf = {
     'bootstrap.servers': 'your-kafka-broker:9092',
-    'group.id': 'your-consumer-group',
+    'group.id': 'consumer_group',
     'auto.offset.reset': 'earliest'
 }
 ```
-
-## Contributing
-
-If you'd like to contribute to this project, please follow the guidelines in [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-Replace `<repository-url>` with the actual URL of your Git repository. Customize sections based on the specific features and requirements of your Kafka producer and consumer. This README provides users and contributors with information on how to set up and use the entire project with Docker Compose.
