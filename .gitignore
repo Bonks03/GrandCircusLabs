@@ -29,3 +29,5 @@ spotify_report/datasets/tracks.csv
 .gitignore
 .gitignore
 spotify_report/datasets/tracks_artists.csv
+wikimedia_messages/kafka_consumer/.venv
+wikimedia_messages/kafka_producer/.venv
