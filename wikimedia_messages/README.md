@@ -69,21 +69,4 @@ The consumer is included in the Docker Compose setup. It will start fetching eve
 
 The consumer is included in the Docker Compose setup. It will automatically consume messages from the `latest_events` topic.
 
-## Configuration
-
-Ensure that your Kafka broker and topic are correctly configured in `producer.py` and `consumer.py`. Update the Kafka broker address and topic name as needed.
-
-```python
-# producer.py
-p = Producer({'bootstrap.servers': 'your-kafka-broker:9092'})
-p.produce('your-kafka-topic', message.encode('utf-8'), callback=delivery_report)
-```
-
-```python
-# consumer.py
-consumer_conf = {
-    'bootstrap.servers': 'your-kafka-broker:9092',
-    'group.id': 'consumer_group',
-    'auto.offset.reset': 'earliest'
-}
 ```
