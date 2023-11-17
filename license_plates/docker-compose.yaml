@@ -1,0 +1,8 @@
+services:
+  pyspark-notebook:
+    image: jupyter/pyspark-notebook
+    ports:
+      - "8888:10000"
+    working_dir: /home
+    volumes:
+      - ./main.ipynb:/home/main.ipynb
