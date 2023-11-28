@@ -15,16 +15,16 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Build the broker Docker image
-      run: docker build ./kafka_broker --file GrandCircusLabs/wikimedia_messages/kafka_broker/Dockerfile --tag broker:$(date +%s)
+      run: docker build GrandCircusLabs/wikimedia_messages/kafka_broker --file GrandCircusLabs/wikimedia_messages/kafka_broker/Dockerfile --tag broker:$(date +%s)
 
     - name: Build the zookeeper Docker image
-      run: docker build ./kafka_zookeeper --file GrandCircusLabs/wikimedia_messages/kafka_zookeeper/Dockerfile --tag zookeeper:$(date +%s)
+      run: docker build GrandCircusLabs/wikimedia_messages/kafka_zookeeper --file GrandCircusLabs/wikimedia_messages/kafka_zookeeper/Dockerfile --tag zookeeper:$(date +%s)
 
     - name: Build the consumer Docker image
-      run: docker build ./kafka_consumer --file GrandCircusLabs/wikimedia_messages/kafka_consumer/Dockerfile --tag consumer:$(date +%s)
+      run: docker build GrandCircusLabs/wikimedia_messages/kafka_consumer --file GrandCircusLabs/wikimedia_messages/kafka_consumer/Dockerfile --tag consumer:$(date +%s)
 
     - name: Build the producer Docker image
-      run: docker build ./kafka_producer --file GrandCircusLabs/wikimedia_messages/kafka_producer/Dockerfile --tag producer:$(date +%s)
+      run: docker build GrandCircusLabs/wikimedia_messages/kafka_producer --file GrandCircusLabs/wikimedia_messages/kafka_producer/Dockerfile --tag producer:$(date +%s)
 
     - name: Login to Docker Hub
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
