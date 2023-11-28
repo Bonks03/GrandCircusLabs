@@ -20,6 +20,9 @@ jobs:
     - name: Log in to Docker Hub
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: Build docker image
+      run: docker build -t random_fact_generator:${{ env.IMAGE_TAG }} ./random_fact_generator/main.py
+
     - name: Tag docker image
       run: docker tag random_fact_generator:${{ env.IMAGE_TAG }} random_fact_generator:${{ env.IMAGE_TAG }}
       
