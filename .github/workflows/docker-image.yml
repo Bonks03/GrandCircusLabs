@@ -30,16 +30,16 @@ jobs:
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push broker Docker image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/devops/broker:$(date +%s)
+      run: docker push bonks/devops/broker:$(date +%s)
 
     - name: Push zookeeper Docker image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/devops/zookeeper:$(date +%s)
+      run: docker push bonks/devops/zookeeper:$(date +%s)
 
     - name: Push consumer Docker image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/devops/consumer:$(date +%s)
+      run: docker push bonks/devops/consumer:$(date +%s)
 
     - name: Push producer Docker image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/devops/producer:$(date +%s)
+      run: docker push bonks/devops/producer:$(date +%s)
 
     - name: Deploy using Docker Compose
       run: docker-compose -f ./wikimedia_messages/docker-compose.yaml up
