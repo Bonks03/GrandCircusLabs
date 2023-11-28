@@ -27,4 +27,4 @@ jobs:
       run: docker tag random_fact_generator:${{ env.IMAGE_TAG }} random_fact_generator:${{ env.IMAGE_TAG }}
       
     - name : Push docker image to repository
-      run: docker push random_fact_generator:${{ env.IMAGE_TAG }}
+      run: docker push bonks/random_fact_generator:random_fact_generator:${{ env.IMAGE_TAG }}
