@@ -24,14 +24,14 @@ services:
       - zookeeper
 
   producer:
-    image: producer:latest
+    image: producer:$(date +%s)
     environment:
       KAFKA_BOOTSTRAP_SERVERS: broker:9092
     depends_on:
       - broker
 
   consumer:
-    image: consumer:latest
+    image: consumer:$(date +%s)
     environment:
       KAFKA_BOOTSTRAP_SERVERS: broker:9092
       KAFKA_GROUP_ID: consumer_group
