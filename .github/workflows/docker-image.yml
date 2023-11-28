@@ -16,15 +16,27 @@ jobs:
 
     - name: Build the broker Docker image
       run: docker build ./kafka_broker --file GrandCircusLabs/wikimedia_messages/kafka_broker/Dockerfile --tag broker:$(date +%s)
-      
+
     - name: Build the zookeeper Docker image
       run: docker build ./kafka_zookeeper --file GrandCircusLabs/wikimedia_messages/kafka_zookeeper/Dockerfile --tag zookeeper:$(date +%s)
-      
+
     - name: Build the consumer Docker image
       run: docker build ./kafka_consumer --file GrandCircusLabs/wikimedia_messages/kafka_consumer/Dockerfile --tag consumer:$(date +%s)
-      
+
     - name: Build the producer Docker image
       run: docker build ./kafka_producer --file GrandCircusLabs/wikimedia_messages/kafka_producer/Dockerfile --tag producer:$(date +%s)
-      
-    - name: Create containers using Docker-compose.yaml
-      run: docker-compose -f GrandCircusLabs/wikimedia_messages/docker-compose.yaml up
+
+    - name: Login to Docker Hub
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push broker Docker image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/broker:$(date +%s)
+
+    - name: Push zookeeper Docker image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/zookeeper:$(date +%s)
+
+    - name: Push consumer Docker image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/consumer:$(date +%s)
+
+    - name: Push producer Docker image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/producer:$(date +%s)
