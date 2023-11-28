@@ -14,32 +14,22 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Set timestamp
+      run: echo "IMAGE_TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
     - name: Build the broker Docker image
-      run: docker build ./wikimedia_messages/kafka_broker --file ./wikimedia_messages/kafka_broker/Dockerfile --tag devops/broker:latest
+      run: docker build ./wikimedia_messages/kafka_broker --file ./wikimedia_messages/kafka_broker/Dockerfile --tag devops/broker:${{ env.IMAGE_TAG }}
 
     - name: Build the zookeeper Docker image
-      run: docker build ./wikimedia_messages/kafka_zookeeper --file ./wikimedia_messages/kafka_zookeeper/Dockerfile --tag devops/zookeeper:latest
+      run: docker build ./wikimedia_messages/kafka_zookeeper --file ./wikimedia_messages/kafka_zookeeper/Dockerfile --tag devops/zookeeper:${{ env.IMAGE_TAG }}
 
     - name: Build the consumer Docker image
-      run: docker build ./wikimedia_messages/kafka_consumer --file ./wikimedia_messages/kafka_consumer/Dockerfile --tag devops/consumer:latest
+      run: docker build ./wikimedia_messages/kafka_consumer --file ./wikimedia_messages/kafka_consumer/Dockerfile --tag devops/consumer:${{ env.IMAGE_TAG }}
 
     - name: Build the producer Docker image
-      run: docker build ./wikimedia_messages/kafka_producer --file ./wikimedia_messages/kafka_producer/Dockerfile --tag devops/producer:latest
+      run: docker build ./wikimedia_messages/kafka_producer --file ./wikimedia_messages/kafka_producer/Dockerfile --tag devops/producer:${{ env.IMAGE_TAG }}
 
     - name: Log in to Docker Hub
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Push broker Docker image
-      run: docker push bonks/devops/broker:latest
-
-    - name: Push zookeeper Docker image
-      run: docker push bonks/devops/zookeeper:latest
-
-    - name: Push consumer Docker image
-      run: docker push bonks/devops/consumer:latest
-
-    - name: Push producer Docker image
-      run: docker push bonks/devops/producer:latest
-
-    - name: Deploy using Docker Compose
-      run: docker-compose -f ./wikimedia_messages/docker-compose.yaml up
+    - name: Push broker Do
