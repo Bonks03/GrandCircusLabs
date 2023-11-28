@@ -10,39 +10,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      IMAGE_TAG: ${{ format('{0:%Y%m%d%H%M%S}', github.event.head_commit.author.date) }}
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
     - name: Build the broker Docker image
-      run: docker build ./wikimedia_messages/kafka_broker --file ./wikimedia_messages/kafka_broker/Dockerfile --tag devops/broker:${{ env.IMAGE_TAG }}
+      run: docker build ./wikimedia_messages/kafka_broker --file ./wikimedia_messages/kafka_broker/Dockerfile --tag devops/broker:latest
 
     - name: Build the zookeeper Docker image
-      run: docker build ./wikimedia_messages/kafka_zookeeper --file ./wikimedia_messages/kafka_zookeeper/Dockerfile --tag devops/zookeeper:${{ env.IMAGE_TAG }}
+      run: docker build ./wikimedia_messages/kafka_zookeeper --file ./wikimedia_messages/kafka_zookeeper/Dockerfile --tag devops/zookeeper:latest
 
     - name: Build the consumer Docker image
-      run: docker build ./wikimedia_messages/kafka_consumer --file ./wikimedia_messages/kafka_consumer/Dockerfile --tag devops/consumer:${{ env.IMAGE_TAG }}
+      run: docker build ./wikimedia_messages/kafka_consumer --file ./wikimedia_messages/kafka_consumer/Dockerfile --tag devops/consumer:latest
 
     - name: Build the producer Docker image
-      run: docker build ./wikimedia_messages/kafka_producer --file ./wikimedia_messages/kafka_producer/Dockerfile --tag devops/producer:${{ env.IMAGE_TAG }}
+      run: docker build ./wikimedia_messages/kafka_producer --file ./wikimedia_messages/kafka_producer/Dockerfile --tag devops/producer:latest
 
     - name: Log in to Docker Hub
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push broker Docker image
-      run: docker push bonks/devops/broker:${{ env.IMAGE_TAG }}
+      run: docker push bonks/devops/broker:latest
 
     - name: Push zookeeper Docker image
-      run: docker push bonks/devops/zookeeper:${{ env.IMAGE_TAG }}
+      run: docker push bonks/devops/zookeeper:latest
 
     - name: Push consumer Docker image
-      run: docker push bonks/devops/consumer:${{ env.IMAGE_TAG }}
+      run: docker push bonks/devops/consumer:latest
 
     - name: Push producer Docker image
-      run: docker push bonks/devops/producer:${{ env.IMAGE_TAG }}
+      run: docker push bonks/devops/producer:latest
 
     - name: Deploy using Docker Compose
       run: docker-compose -f ./wikimedia_messages/docker-compose.yaml up
