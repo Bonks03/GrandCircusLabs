@@ -1,0 +1,30 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Build the broker Docker image
+      run: docker build ./kafka_broker --file GrandCircusLabs/wikimedia_messages/kafka_broker/Dockerfile --tag broker:$(date +%s)
+      
+    - name: Build the zookeeper Docker image
+      run: docker build ./kafka_zookeeper --file GrandCircusLabs/wikimedia_messages/kafka_zookeeper/Dockerfile --tag zookeeper:$(date +%s)
+      
+    - name: Build the consumer Docker image
+      run: docker build ./kafka_consumer --file GrandCircusLabs/wikimedia_messages/kafka_consumer/Dockerfile --tag consumer:$(date +%s)
+      
+    - name: Build the producer Docker image
+      run: docker build ./kafka_producer --file GrandCircusLabs/wikimedia_messages/kafka_producer/Dockerfile --tag producer:$(date +%s)
+      
+    - name: Create containers using Docker-compose.yaml
+      run: docker-compose -f GrandCircusLabs/wikimedia_messages/docker-compose.yaml up
