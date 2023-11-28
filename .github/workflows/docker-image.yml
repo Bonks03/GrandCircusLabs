@@ -21,7 +21,7 @@ jobs:
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build docker image
-      run: docker build -t bonks/random_fact_generator:latest .
+      run: docker build -t bonks/random_fact_generator:latest ./random_fact_generator/.
 
     - name: Tag docker image
       run: docker tag bonks/random_fact_generator:latest bonks/random_fact_generator:${{ env.IMAGE_TAG }}
