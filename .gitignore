@@ -35,3 +35,4 @@ oven_temp/producer/.venv
 oven_temp/oven/.venv
 oven_temp/consumer/.venv
 
+random_fact_generator/.venv
