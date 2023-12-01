@@ -7,7 +7,7 @@ def main():
         'auto.offset.reset': 'earliest'
     })
 
-    c.subscribe(['latest_events'])
+    c.subscribe(['temperature'])
 
     while True:
         msg = c.poll(1.0)
