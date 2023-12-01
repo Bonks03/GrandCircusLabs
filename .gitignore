@@ -36,3 +36,5 @@ oven_temp/oven/.venv
 oven_temp/consumer/.venv
 
 random_fact_generator/.venv
+pyspark_chicago/docker-compose.yaml
+pyspark_chicago/Towed_Vehicles.csv
